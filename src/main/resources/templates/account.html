@@ -42,7 +42,7 @@
                         </li>
                     </ul>
                     <div class="tab-content" id="myTabContent">
-                        <!-- Tab 1-->
+                        <!-- Accounts Table Tab 1-->
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                             <div class="table-responsive-sm">
                                 <p><h5 class="card-title">All users</h5></p>
@@ -65,51 +65,10 @@
                                         <td th:text="${account.nickname}"></td>
                                         <td th:text="${account.email}"></td>
                                         <td th:text="${account.password}"></td>
-                                        <!--<td><a type="submit" class="btn btn-primary" th:href="@{/account/showUpdateForm/{id}(id=${account.id})}">Edit</a></td>-->
                                         <td>
-                                            <button th:attr="data-target=@{#__${'edit' + account.id}__}" type="button" class="btn btn-primary" data-toggle="modal">Edit</button>
-                                            <!-- Modal -->
-                                            <div th:id="edit+${account.id}" class="modal fade" >
-                                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true"></span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="modal-body">
-
-                                                           <form th:id="ed+${account.id}" role="form" class="form-group" method="post" th:action="@{/account/update}">
-                                                               <div class="form-group">
-                                                                   <label for="id">id</label>
-                                                                   <input id="id" class="form-control" type="text" name="id" th:value="${account.id}">
-                                                               </div>
-                                                               <div class="form-group">
-                                                                    <label for="first_name">first_name</label>
-                                                                    <input id="first_name" class="form-control" type="text" name="first_name" th:value="${account.first_name}">
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="nickname">nickname</label>
-                                                                    <input id="nickname" class="form-control" type="text" name="nickname" th:value="${account.nickname}">
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="email">email</label>
-                                                                    <input id="email" class="form-control" type="email" name="email"  th:value="${account.email}">
-                                                                </div>
-                                                                <div class="form-group">
-                                                                    <label for="password">password</label>
-                                                                    <input id="password" class="form-control" type="password" name="password" th:value  ="${account.password}">
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                            <button th:form="ed+${account.id}" type="submit" class="btn btn-primary">Edit user</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                           <button th:attr="data-target=@{#__${'edit' + account.id}__}" type="button" class="btn btn-primary" data-toggle="modal">Edit</button>
+                                           <!-- Update Account page -->
+                                            <div th:replace="update-account :: update-page" class="addForm"></div>
                                         </td>
                                         <td><a type="submit" class="btn btn-primary" th:href="@{/account/delete/{id}(id=${account.id})}">Delete</a></td>
                                     </tr>
@@ -118,14 +77,18 @@
                             </div>
                         </div>
 
-                        <!-- Tab 2-->
+                        <!-- New Account Tab 2 -->
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <p><h5 class="card-title">Add new Account</h5></p>
+                            <!-- Add Account page -->
                             <div th:replace="add-account :: add-page" class="addForm"></div>
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">Loren ipsum 2</div>
+                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                    <!-- User page -->
+                    <div th:replace="userpage :: user-page" class="addForm"></div>
+                </div>
             </div>
         </div>
     </div>

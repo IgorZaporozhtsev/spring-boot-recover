@@ -9,31 +9,50 @@
 
 </head>
 <body>
-<div class="container">
-    <div class='col-3 col-sm-5 col-md-12 col-lg-4'>
-        <form action="#" th:action="@{/account/update}" th:object="${account}" method="post">
-            <div class="form-group">
-                <label for="id">id</label>
-                <input id="id" class="form-control" type="text" name="id" th:field="${account.id}">
+<div th:fragment="update-page">
+
+    <!-- Modal -->
+    <div th:id="edit+${account.id}" class="modal fade" >
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form th:id="ed+${account.id}" role="form" class="form-group" method="post" th:action="@{/account/update}">
+                        <div class="form-group">
+                            <label for="id">id</label>
+                            <input id="id" class="form-control" type="text" name="id" th:value="${account.id}">
+                        </div>
+                        <div class="form-group">
+                            <label for="first_name">first_name</label>
+                            <input id="first_name" class="form-control" type="text" name="first_name" th:value="${account.first_name}">
+                        </div>
+                        <div class="form-group">
+                            <label for="nickname">nickname</label>
+                            <input id="nickname" class="form-control" type="text" name="nickname" th:value="${account.nickname}">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">email</label>
+                            <input id="email" class="form-control" type="email" name="email"  th:value="${account.email}">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">password</label>
+                            <input id="password" class="form-control" type="password" name="password" th:value  ="${account.password}">
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button th:form="ed+${account.id}" type="submit" class="btn btn-primary">Edit user</button>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="first_name">first_name</label>
-                <input id="first_name" class="form-control" type="text" name="first_name" th:field="${account.first_name}">
-            </div>
-            <div class="form-group">
-                <label for="nickname">nickname</label>
-                <input id="nickname" class="form-control" type="text" name="nickname" th:field="${account.nickname}">
-            </div>
-            <div class="form-group">
-                <label for="email">email</label>
-                <input id="email" class="form-control" type="email" name="email"  th:field="${account.email}">
-            </div>
-            <div class="form-group">
-                <label for="password">password</label>
-                <input id="password" class="form-control" type="password" name="password" th:field="${account.password}">
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+        </div>
     </div>
 </div>
 
