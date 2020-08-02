@@ -1,18 +1,16 @@
 package com.zeecoder.reboot.model;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
+import lombok.*;
+//import org.springframework.security.core.GrantedAuthority;
 import javax.persistence.*;
 
 @NoArgsConstructor
+@ToString
 @Setter
 @Getter
 @Entity
 @Table(name = "role")
-public class Role implements GrantedAuthority {
+public class Role /*implements GrantedAuthority*/ {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,8 +23,8 @@ public class Role implements GrantedAuthority {
     Account account;
 
 
-    @Override
+/*    @Override
     public String getAuthority() {
         return getRole();
-    }
+    }*/
 }

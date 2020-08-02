@@ -1,3 +1,4 @@
+/*
 package com.zeecoder.reboot.security;
 
 import com.zeecoder.reboot.service.AccountService;
@@ -30,3 +31,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new User(derivedAccount.getUsername(), derivedAccount.getPassword(), derivedAccount.getAuthorities());
     }
 }
+*/

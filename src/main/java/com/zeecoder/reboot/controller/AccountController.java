@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 
-@Controller
+//@Controller
 @RequestMapping(value = "/account")
 public class AccountController {
 
@@ -32,7 +32,6 @@ public class AccountController {
 
     @GetMapping("/showAddForm")
     public String showRoles(Model model) {
-        //model.addAttribute("roles", Role.values());
         model.addAttribute("account", new Account());
         return "add-account";
     }

@@ -1,3 +1,4 @@
+/*
 package com.zeecoder.reboot.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -11,3 +12,4 @@ public class MvcConfig implements WebMvcConfigurer {
         registry.addViewController("/login").setViewName("/auth/login");
     }
 }
+*/
