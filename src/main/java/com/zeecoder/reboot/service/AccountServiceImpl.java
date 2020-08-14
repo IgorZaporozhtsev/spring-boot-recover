@@ -5,18 +5,20 @@ import com.zeecoder.reboot.model.Account;
 import com.zeecoder.reboot.model.Role;
 import com.zeecoder.reboot.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
-    //private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
     private final AccountRepository repository;
 
     @Autowired //@Lazy - resolve Circular Dependency https://www.baeldung.com/circular-dependencies-in-spring
-    public AccountServiceImpl(/*@Lazy PasswordEncoder passwordEncoder, */AccountRepository repository) {
-     //   this.passwordEncoder = passwordEncoder;
+    public AccountServiceImpl(@Lazy PasswordEncoder passwordEncoder, AccountRepository repository) {
+        this.passwordEncoder = passwordEncoder;
         this.repository = repository;
     }
 
@@ -25,24 +27,21 @@ public class AccountServiceImpl implements AccountService {
         return repository.findAll();
     }
 
-    @Override
-    public void add(Account account) {
-        isHasRoleUser(account);
-        // account.setPassword(passwordEncoder.encode(account.getPassword()));
-        repository.save(account);
-    }
+    public void add(Account account, String roleStr) {
+        String[] roleStrings = roleStr.split("\\s*,\\s*");
 
-    private void isHasRoleUser(Account account) {
-        Set<Role> roles = account.getRoles();
-
-        Role userRole = new Role();
-        userRole.setRole("USER");
-        userRole.setAccount(account);
-
-        if (!roles.contains(userRole)){ //need @EqualsAndHashCode
-            roles.add(userRole);
-            account.setRoles(roles);
+        Set<Role> rolesSet = new HashSet<>();
+        for (String s: roleStrings) {
+            Role role = new Role();
+            role.setRole(s);
+            rolesSet.add(role);
         }
+
+        account.getRoles().addAll(rolesSet);
+        account.getRoles().forEach(role -> role.setAccount(account));
+
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        repository.save(account);
     }
 
     public Optional<Account> getOne(Long id) {

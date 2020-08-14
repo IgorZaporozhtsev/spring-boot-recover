@@ -1,18 +1,16 @@
 package com.zeecoder.reboot.controller;
 
 import com.zeecoder.reboot.model.Account;
-import com.zeecoder.reboot.model.Role;
 import com.zeecoder.reboot.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
 
-//@Controller
+@Controller
 @RequestMapping(value = "/account")
 public class AccountController {
 
@@ -38,7 +36,7 @@ public class AccountController {
 
     @PostMapping("/add")
     public String addAccount(@ModelAttribute("account") Account account, @RequestParam String role)  {
-        //service.add(account, role);
+        service.add(account, role);
         return "redirect:/account";
     }
 
@@ -51,7 +49,7 @@ public class AccountController {
 
     @PostMapping("/update")
     public String update(Account account, Model model) {
-        //service.update(account);
+        service.update(account);
         model.addAttribute("accounts", service.getAll());
         return "redirect:/account";
     }
@@ -61,5 +59,4 @@ public class AccountController {
         service.delete(id);
         return "redirect:/account";
     }
-
 }

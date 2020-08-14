@@ -1,4 +1,3 @@
-/*
 package com.zeecoder.reboot.security;
 
 import org.springframework.security.core.Authentication;
@@ -27,4 +26,4 @@ public class AuthSuccessHandlerImpl implements AuthenticationSuccessHandler {
             response.sendRedirect("/user_page");
         }
     }
-}*/
+}
