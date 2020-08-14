@@ -38,7 +38,7 @@ public class AccountController {
 
     @PostMapping("/add")
     public String addAccount(@ModelAttribute("account") Account account, @RequestParam String role)  {
-        service.add(account, role);
+        //service.add(account, role);
         return "redirect:/account";
     }
 
@@ -51,7 +51,7 @@ public class AccountController {
 
     @PostMapping("/update")
     public String update(Account account, Model model) {
-        service.update(account);
+        //service.update(account);
         model.addAttribute("accounts", service.getAll());
         return "redirect:/account";
     }

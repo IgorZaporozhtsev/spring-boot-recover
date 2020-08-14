@@ -8,7 +8,7 @@ public interface AccountService {
 
     List<Account> getAll();
 
-    void add(Account account, String role);
+    void add(Account account);
 
     Optional<Account> getOne(Long id);
 

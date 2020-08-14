@@ -5,11 +5,7 @@ import com.zeecoder.reboot.model.Account;
 import com.zeecoder.reboot.model.Role;
 import com.zeecoder.reboot.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.annotation.Lazy;
-//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -30,33 +26,32 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void add(Account account, String roleStr) {
-        String[] roleStrings = roleStr.split("\\s*,\\s*");
-
-        Set<Role> rolesSet = new HashSet<>();
-        for (String s: roleStrings) {
-            Role role = new Role();
-            role.setRole(s);
-            rolesSet.add(role);
-        }
-
-        account.getRoles().addAll(rolesSet);
-        account.getRoles().forEach(role -> role.setAccount(account));
-
-       // account.setPassword(passwordEncoder.encode(account.getPassword()));
+    public void add(Account account) {
+        isHasRoleUser(account);
+        // account.setPassword(passwordEncoder.encode(account.getPassword()));
         repository.save(account);
     }
 
-    @Override
+    private void isHasRoleUser(Account account) {
+        Set<Role> roles = account.getRoles();
+
+        Role userRole = new Role();
+        userRole.setRole("USER");
+        userRole.setAccount(account);
+
+        if (!roles.contains(userRole)){ //need @EqualsAndHashCode
+            roles.add(userRole);
+            account.setRoles(roles);
+        }
+    }
+
     public Optional<Account> getOne(Long id) {
         return repository.findById(id);
     }
 
     @Override
     public void update(Account account) {
-        Account derivedAccount = repository.getOne(account.getId());
-        derivedAccount = account;
-        repository.save(derivedAccount);
+        repository.save(account);
     }
 
     @Override
