@@ -37,10 +37,10 @@ public class AccountRestController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping(value = "/delete/{id}")
+/*    @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable(value = "id")  Long id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
-    }
+    }*/
 
 }
