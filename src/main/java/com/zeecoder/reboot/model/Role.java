@@ -18,7 +18,6 @@ public class Role{
     private Long id;
     @Column
     private String role;
-
     @ManyToOne
     @JoinColumn(name = "account_id")
     Account account;
