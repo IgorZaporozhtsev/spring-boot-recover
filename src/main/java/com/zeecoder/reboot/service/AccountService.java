@@ -2,7 +2,6 @@ package com.zeecoder.reboot.service;
 
 import com.zeecoder.reboot.model.Account;
 import java.util.List;
-import java.util.Optional;
 
 public interface AccountService {
 
@@ -10,12 +9,7 @@ public interface AccountService {
 
     void add(Account account);
 
-    Optional<Account> getOne(Long id);
-
     void update(Account account);
 
     void delete(Long id);
-
-    Account findByName(String nickname);
-
 }

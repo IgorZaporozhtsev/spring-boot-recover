@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "role")
 @JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="@roleId")
-public class Role /*implements GrantedAuthority*/ {
+public class Role{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,8 +23,4 @@ public class Role /*implements GrantedAuthority*/ {
     @JoinColumn(name = "account_id")
     Account account;
 
-    /*    @Override
-    public String getAuthority() {
-        return getRole();
-    }*/
 }
