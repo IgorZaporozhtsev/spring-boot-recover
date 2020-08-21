@@ -22,7 +22,6 @@ public class AccountRestController {
 
     @GetMapping
     public List<Account> getAll(){
-        //AccountListDto accountListDto = new AccountListDto(service.getAll());
         return service.getAll();
     }
 
