@@ -12,7 +12,6 @@ import java.util.Set;
 @Getter
 @Entity
 @Table(name = "role")
-//@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="@roleId")
 public class Role{
 
     @Id
@@ -21,7 +20,7 @@ public class Role{
     @Column
     private String role;
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.MERGE)
     private Set<Account> accounts = new HashSet<>();
 
