@@ -20,7 +20,7 @@ public class Role{
     @Column
     private String role;
 
-    //@JsonIgnore
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.MERGE)
     private Set<Account> accounts = new HashSet<>();
 
