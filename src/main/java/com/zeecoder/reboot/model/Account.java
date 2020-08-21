@@ -27,6 +27,24 @@ public class Account{
     @Column
     private boolean active;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    //@JoinTable describe intermediate table
+    @JoinTable(name = "account_to_role",
+            joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
+
+    public Account(String first_name) {
+        this.first_name = first_name;
+    }
+
+    public void addRole(Role role) {
+        roles.add( role );
+        role.getAccounts().add(this);
+    }
+
+    public void removeRole(Role role) {
+        roles.remove(role);
+        role.getAccounts().remove(this);
+    }
 }
