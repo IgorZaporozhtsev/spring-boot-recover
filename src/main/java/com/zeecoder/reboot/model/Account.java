@@ -2,11 +2,7 @@ package com.zeecoder.reboot.model;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +12,7 @@ import java.util.Set;
 @Entity
 @Table(name = "account")
 @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@accountId")
-public class Account implements UserDetails {
+public class Account{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -31,37 +27,24 @@ public class Account implements UserDetails {
     @Column
     private boolean active;
 
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    //@JoinTable describe intermediate table
+    @JoinTable(name = "account_to_role",
+            joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
 
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return getRoles();
+    public Account(String first_name) {
+        this.first_name = first_name;
     }
 
-    @Override
-    public String getUsername() {
-        return nickname;
+    public void addRole(Role role) {
+        roles.add( role );
+        role.getAccounts().add(this);
     }
 
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return isActive();
+    public void removeRole(Role role) {
+        roles.remove(role);
+        role.getAccounts().remove(this);
     }
 }

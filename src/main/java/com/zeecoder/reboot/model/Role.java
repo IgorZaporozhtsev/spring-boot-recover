@@ -2,9 +2,9 @@ package com.zeecoder.reboot.model;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -12,20 +12,17 @@ import javax.persistence.*;
 @Getter
 @Entity
 @Table(name = "role")
-@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="@roleId")
-public class Role implements GrantedAuthority {
+//@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="@roleId")
+public class Role{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column
     private String role;
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    Account account;
 
-    @Override
-    public String getAuthority() {
-        return getRole();
-    }
+    @JsonIgnore
+    @ManyToMany(mappedBy = "roles", cascade = CascadeType.MERGE)
+    private Set<Account> accounts = new HashSet<>();
+
 }
