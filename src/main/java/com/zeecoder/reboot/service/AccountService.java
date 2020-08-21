@@ -7,7 +7,7 @@ public interface AccountService {
 
     List<Account> getAll();
 
-    void add(Account account);
+    void add(Account account, String role);
 
     void update(Account account);
 
