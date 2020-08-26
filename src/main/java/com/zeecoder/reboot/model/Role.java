@@ -24,4 +24,7 @@ public class Role{
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.MERGE)
     private Set<Account> accounts = new HashSet<>();
 
+    public Role(String role) {
+        this.role = role;
+    }
 }
