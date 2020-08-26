@@ -26,19 +26,19 @@ public class AccountRestController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addAccount(@RequestBody Account account)  {
+    public ResponseEntity<String> addAccount(@RequestBody Account account)  { //todo ResponseEntity<String ???>
         service.add(account);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PutMapping(value = "/update")
-    public ResponseEntity<String> update(@RequestBody Account account) {
+    public ResponseEntity<Void> update(@RequestBody Account account) {
         service.update(account);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<String> delete(@PathVariable(value = "id")  Long id) {
+    public ResponseEntity<Void> delete(@PathVariable(value = "id")  Long id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

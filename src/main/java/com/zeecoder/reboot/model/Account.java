@@ -1,10 +1,10 @@
 package com.zeecoder.reboot.model;
 
-import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
 
 @NoArgsConstructor
 @Setter
@@ -33,8 +33,17 @@ public class Account{
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
 
-    public Account(String first_name) {
+    public Account(
+            String first_name,
+            String nickname,
+            String password,
+            String email,
+            boolean active) {
         this.first_name = first_name;
+        this.nickname = nickname;
+        this.password = password;
+        this.email = email;
+        this.active = active;
     }
 
     public void addRole(Role role) {
