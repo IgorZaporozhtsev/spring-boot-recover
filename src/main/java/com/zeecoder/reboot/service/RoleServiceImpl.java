@@ -12,6 +12,6 @@ public class RoleServiceImpl {
     }
 
     public Role getRoleByName(String role){
-        return repository.findByRole(role);
+        return repository.findByRoleName(role);
     }
 }
