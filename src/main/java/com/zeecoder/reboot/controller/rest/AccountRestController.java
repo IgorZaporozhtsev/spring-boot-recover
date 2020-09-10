@@ -25,6 +25,12 @@ public class AccountRestController {
         return service.getAll();
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<Account> getOne(@PathVariable(value = "id")  Long id){
+        Account account = service.getAccountById(id);
+        return ResponseEntity.accepted().body(account);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<String> addAccount(@RequestBody Account account)  { //todo ResponseEntity<String ???>
         service.add(account);
