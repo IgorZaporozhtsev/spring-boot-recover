@@ -18,13 +18,13 @@ public class Role{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column
-    private String role;
+    private String roleName;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "roles", cascade = CascadeType.MERGE)
     private Set<Account> accounts = new HashSet<>();
 
-    public Role(String role) {
-        this.role = role;
+    public Role(String roleName) {
+        this.roleName = roleName;
     }
 }

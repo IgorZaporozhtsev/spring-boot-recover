@@ -37,12 +37,12 @@ public class AccountServiceImpl implements AccountService {
         );
 
         Account derivedAccount = accountRepository.save(transientAccount);
-        Role roleUser = roleRepository.findByRole("USER");
+        Role roleUser = roleRepository.findByRoleName("USER");
 
         derivedAccount.addRole(Objects.requireNonNullElseGet(roleUser, () -> new Role("USER")));
 
         for (Role accRole: account.getRoles()) {
-            Role dbRole = roleRepository.findByRole(accRole.getRole());
+            Role dbRole = roleRepository.findByRoleName(accRole.getRoleName());
             derivedAccount.addRole(Objects.requireNonNullElse(dbRole, accRole));
             accountRepository.save(derivedAccount);
         }
