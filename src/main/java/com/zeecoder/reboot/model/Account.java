@@ -2,6 +2,7 @@ package com.zeecoder.reboot.model;
 
 import lombok.*;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,9 +17,11 @@ public class Account{
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @Column
-    private String first_name;
+    private String firstName;
     @Column
     private String nickname;
+    @NotNull(message = "mustn't null")
+    @NotEmpty(message = "mustn't empty")
     @Column
     private String password;
     @Column
@@ -26,7 +29,7 @@ public class Account{
     @Column
     private boolean active;
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST},  fetch = FetchType.EAGER)
     //@JoinTable describe intermediate table
     @JoinTable(name = "account_to_role",
             joinColumns = @JoinColumn(name = "account_id", referencedColumnName = "id"),
@@ -34,25 +37,15 @@ public class Account{
     private Set<Role> roles = new HashSet<>();
 
     public Account(
-            String first_name,
+            String firstName,
             String nickname,
             String password,
             String email,
             boolean active) {
-        this.first_name = first_name;
+        this.firstName = firstName;
         this.nickname = nickname;
         this.password = password;
         this.email = email;
         this.active = active;
-    }
-
-    public void addRole(Role role) {
-        roles.add( role );
-        role.getAccounts().add(this);
-    }
-
-    public void removeRole(Role role) {
-        roles.remove(role);
-        role.getAccounts().remove(this);
     }
 }
