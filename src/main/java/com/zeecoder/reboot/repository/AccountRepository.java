@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-
+    Account findByFirstName(String nickname);
 }

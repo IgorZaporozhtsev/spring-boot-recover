@@ -5,6 +5,8 @@ import com.zeecoder.reboot.model.Account;
 import com.zeecoder.reboot.model.Role;
 import com.zeecoder.reboot.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
@@ -13,9 +15,11 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AccountServiceImpl(AccountRepository repository, RoleService roleService) {
+    public AccountServiceImpl(@Lazy PasswordEncoder passwordEncoder, AccountRepository repository, RoleService roleService) {
+        this.passwordEncoder = passwordEncoder;
         this.accountRepository = repository;
         this.roleService = roleService;
     }
@@ -26,7 +30,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void add(Account account) {
+    public void add(Account account, String roleStr) {
+
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
+        Set<Role> collectRolesToSet = collectRolesToSet(roleStr);
+        account.setRoles(collectRolesToSet);
 
         Set<Role> roles = account.getRoles();
         Set<Role> toRemove = new HashSet<>();
@@ -38,7 +46,7 @@ public class AccountServiceImpl implements AccountService {
 
         //ConcurrentModificationException account.setRoles(roles);
         for (Role role : roles) {
-            Role derivedRole = roleService.getRoleByName(role.getRoleName());
+            Role derivedRole = roleService.getRoleByName(role.getRoleName()); //todo don't retrieve data form Db in loop
             if (derivedRole != null){
                 toRemove.add(role);
                 toAdd.add(derivedRole);
@@ -52,7 +60,21 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
     }
 
-   @Override
+    private Set<Role> collectRolesToSet(String roleStr){
+
+        String[] roleStrings = roleStr.split("\\s*,\\s*");
+        Set<Role> rolesSet = new HashSet<>();
+
+        for (String s: roleStrings) {
+            Role role = new Role();
+            role.setRoleName(s);
+            rolesSet.add(role);
+        }
+
+        return rolesSet;
+    }
+
+    @Override
     public void update(Account account) {
         accountRepository.save(account);
     }
@@ -64,6 +86,11 @@ public class AccountServiceImpl implements AccountService {
 
     public Account getAccountById(Long id) {
         return accountRepository.getOne(id);
+    }
+
+    @Override
+    public Account findByFirstName(String firstName) {
+        return accountRepository.findByFirstName(firstName);
     }
 }
 

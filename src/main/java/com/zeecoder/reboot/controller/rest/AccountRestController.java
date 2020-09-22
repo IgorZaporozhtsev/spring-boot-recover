@@ -3,14 +3,12 @@ package com.zeecoder.reboot.controller.rest;
 import com.zeecoder.reboot.model.Account;
 import com.zeecoder.reboot.service.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/account")
+@RequestMapping(value = "/api/accounts")
 public class AccountRestController {
 
     private final AccountServiceImpl service;
@@ -20,12 +18,12 @@ public class AccountRestController {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping(value = "/getAccounts")
     public List<Account> getAll(){
         return service.getAll();
     }
 
-    @GetMapping(value = "/{id}")
+   /* @GetMapping(value = "/{id}")
     public ResponseEntity<Account> getOne(@PathVariable(value = "id")  Long id){
         Account account = service.getAccountById(id);
         return ResponseEntity.accepted().body(account);
@@ -42,11 +40,11 @@ public class AccountRestController {
         service.update(account);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
+       return new ResponseEntity<>(HttpStatus.OK);
+    }*/
 
     @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<Void> delete(@PathVariable(value = "id")  Long id) {
+    public void delete(@PathVariable(value = "id")  Long id) {
         service.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
