@@ -3,6 +3,7 @@ package com.zeecoder.reboot.controller.rest;
 import com.zeecoder.reboot.model.Account;
 import com.zeecoder.reboot.service.AccountServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,12 +24,12 @@ public class AccountRestController {
         return service.getAll();
     }
 
-   /* @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<Account> getOne(@PathVariable(value = "id")  Long id){
         Account account = service.getAccountById(id);
         return ResponseEntity.accepted().body(account);
     }
-
+/*
     @PostMapping("/add")
     public ResponseEntity<String> addAccount(@RequestBody Account account)  { //todo ResponseEntity<String ???>
         service.add(account);
