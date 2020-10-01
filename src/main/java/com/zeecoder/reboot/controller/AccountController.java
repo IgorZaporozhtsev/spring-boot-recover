@@ -1,7 +1,6 @@
 package com.zeecoder.reboot.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.zeecoder.reboot.dto.AccountDto;
 import org.springframework.stereotype.Controller;
 import com.zeecoder.reboot.model.Account;
 import com.zeecoder.reboot.service.AccountService;
@@ -66,8 +65,8 @@ public class AccountController {
     }
 
     @PostMapping("/update")
-    public String update(AccountDto dto, Model model) {
-        service.update(dto);
+    public String update(Account account, Model model) {
+        service.update(account);
         model.addAttribute("accounts", service.getAll());
         return "redirect:/account";
     }

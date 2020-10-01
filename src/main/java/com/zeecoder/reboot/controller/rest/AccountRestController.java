@@ -38,7 +38,7 @@ public class AccountRestController {
 
     @PutMapping(value = "/update")
     public ResponseEntity<Void> update(@RequestBody AccountDto dto) {
-        service.update(dto);
+        System.out.println(dto.toString());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
