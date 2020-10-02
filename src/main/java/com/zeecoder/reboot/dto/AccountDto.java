@@ -4,6 +4,7 @@ import com.zeecoder.reboot.model.Role;
 import lombok.*;
 
 import java.util.List;
+import java.util.Set;
 
 @ToString
 @Getter
@@ -17,5 +18,5 @@ public class AccountDto {
     private String password;
     private String email;
     private boolean active;
-    private List<Role> roles;
+    private Set<Role> roles;
 }
