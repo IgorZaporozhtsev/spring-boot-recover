@@ -80,7 +80,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void update(AccountDto dto) {
+    public void update(AccountDto dto) { //todo переписать на lambda
+
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         Set<Role> roles = dto.getRoles();
         Set<Role> addRoles = new HashSet<>();
