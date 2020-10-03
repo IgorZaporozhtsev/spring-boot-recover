@@ -1,3 +1,8 @@
+$( document ).ready(function() {
+    console.log( "document loaded" );
+});
+
+
 $.get( "/api/accounts/getAccounts", function( data ) {
         $( ".result" ).html( data );
         setPageData(data);
@@ -17,7 +22,7 @@ function setPageData(data){
                     "<td>" + account.nickname + "</td>" +
                     "<td>" + account.email +    "</td>" +
                     "<td>" + account.password + "</td>" +
-                    "<td><button id="+ id + " type='button' class='btn btn-primary edit' data-toggle='modal' data-target='#exampleModal'>" + 'Edit' + "</button></td>" +
+                    "<td><button id="+ id + " type='button' class='btn btn-primary edit' data-toggle='modal' data-target='#editModal'>" + 'Edit' + "</button></td>" +
                     "<td><button id="+ id + " type='button' class='btn btn-primary del' >" + 'Delete' + "</button></td>" +
                     "<tr>"
                 );
@@ -25,38 +30,38 @@ function setPageData(data){
         }
 }
 
-$(document).ready(function(){
-    $(".del").click(function () {
+$(document).on("click", ".del", function () {
     var id = $(this).attr('id');
-        $.ajax({
-                type: 'DELETE',
-                url: '/api/accounts/delete/'+id,
-                data: 'id=' + id,
-                success: function (data) {
-                        //reload page
-                        location.reload();
-                }
-        });
-    })
-});
 
-$(document).ready(function () {
-    $('.edit').on('click', function () {
-        var id = $(this).attr('id');
-
-        $.getJSON( "/api/accounts/"+id+"", function( data ) {
-            $('#id_edit', ).val(data.id);
-            $('#first_name_edit', ).val(data.firstName);
-            $('#nickname_edit').val(data.nickname);
-            $('#email_edit').val(data.email);
-
-            $.each(data.roles, function (index, value) {
-               createRoleInput(value.roleName);
-            });
-        });
+    $.ajax({
+            type: 'DELETE',
+            url: '/api/accounts/delete/'+id,
+            data: 'id=' + id,
+            success: function (data) {
+                    //reload page
+                    location.reload();
+            }
     });
 });
 
+$(document).on("click", ".edit", function () {
+        var id = $(this).attr('id');
+        $.get( "/api/accounts/"+id, function( data ) {
+            populateDataToModal(data);
+        });
+});
+
+function populateDataToModal(data) {
+    $('#id_edit').val(data.id);
+    $('#first_name_edit').val(data.firstName);
+    $('#nickname_edit').val(data.nickname);
+    $('#email_edit').val(data.email);
+
+    $.each(data.roles, function (index, value) {
+       createRoleInput(value.roleName);
+    });
+
+}
 
 function createRoleInput(roleName) {
 // add row
@@ -75,29 +80,21 @@ function createRoleInput(roleName) {
 
 // remove role row after close close window (avoid repeat role in each Edit modal window)
 $(document).ready(function(){
-    $('#exampleModal').on('hidden.bs.modal', function (e) {
+    $('#editModal').on('hidden.bs.modal', function (e) {
         $('#newRow').children().remove();
     });
 });
 
-$(document).ready(function(){
-// add row
-    $("#addRow").click(function () {
-
+$(document).on("click", "#addRow", function () {
         createRoleInput();
-    });
-
-    // remove row
-    $(document).on('click', '#removeRow', function () {
-        $(this).closest('#inputFormRow').remove();
-    })
+});
+// remove row
+$(document).on('click', '#removeRow', function () {
+    $(this).closest('#inputFormRow').remove();
 });
 
 
-$(document).ready(function(){
-    $("#editButton").click(function(e) {
-
-        e.preventDefault(); // avoid to execute the actual submit of the form.
+$(document).on("click", "#editButton", function () {
 
         var id = $('#id_edit').val();
         var fst_name = $("#first_name_edit").val();
@@ -126,13 +123,23 @@ $(document).ready(function(){
             contentType: "application/json",
             url: '/api/accounts/update',
             data: JSON.stringify(account),
-            dataType: 'json',
-            success: function (data) {
+            success: function(data){
+                console.log("success");
+                closeModal();
             },
             error: function (e) {
+                console.log("error");
+                closeModal();
+            },
+            done : function(e) {
+                console.log("done");
+                closeModal();
             }
         });
-
-    });
 });
+
+
+function closeModal() {
+  $( '#editModal' ).modal('toggle');
+}
 

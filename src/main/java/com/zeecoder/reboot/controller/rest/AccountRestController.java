@@ -39,7 +39,7 @@ public class AccountRestController {
     @PutMapping(value = "/update")
     public ResponseEntity<Void> update(@RequestBody AccountDto dto) {
         service.update(dto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/delete/{id}")
