@@ -1,5 +1,6 @@
 package com.zeecoder.reboot.controller.rest;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zeecoder.reboot.dto.AccountDto;
 import com.zeecoder.reboot.model.Account;
 import com.zeecoder.reboot.service.AccountServiceImpl;
@@ -8,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -34,7 +37,14 @@ public class AccountRestController {
         return ResponseEntity.accepted().body(account);
     }
 
-    //todo here must be add method
+    @PostMapping("/add")
+    public String addAccount(@Valid @ModelAttribute("account") Account account, BindingResult result, @RequestParam String role) throws JsonProcessingException {
+        if (result.hasErrors()) {
+            return "redirect:/account";
+        }
+        service.add(account, role);
+        return "redirect:/account";
+    }
 
     @PutMapping(value = "/update")
     public ResponseEntity<Void> update(@RequestBody AccountDto dto) {
