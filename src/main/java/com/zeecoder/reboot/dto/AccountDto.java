@@ -3,7 +3,6 @@ package com.zeecoder.reboot.dto;
 import com.zeecoder.reboot.model.Role;
 import lombok.*;
 
-import java.util.List;
 import java.util.Set;
 
 @ToString
