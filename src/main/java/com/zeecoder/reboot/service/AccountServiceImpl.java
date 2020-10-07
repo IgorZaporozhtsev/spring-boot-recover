@@ -35,48 +35,33 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void add(Account account, String roleStr) {
+    public void add(AccountDto dto) {
 
-        account.setPassword(passwordEncoder.encode(account.getPassword()));
-        Set<Role> collectRolesToSet = collectRolesToSet(roleStr);
-        account.setRoles(collectRolesToSet);
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
-        Set<Role> roles = account.getRoles();
-        Set<Role> toRemove = new HashSet<>();
-        Set<Role> toAdd = new HashSet<>();
-
+        Set<Role> roles = dto.getRoles();
         Role userRole = new Role("USER");
         roles.add(userRole);
-        account.setRoles(roles);
+        Set<Role> addRoles = new HashSet<>();
+        List<Role> allRoles = roleService.getAll();
 
-        //ConcurrentModificationException account.setRoles(roles);
-        for (Role role : roles) {
-            Role derivedRole = roleService.getRoleByName(role.getRoleName()); //todo don't retrieve data form Db in loop
-            if (derivedRole != null){
-                toRemove.add(role);
-                toAdd.add(derivedRole);
+        for (Role role1 : roles) {
+            boolean coincidence = false;
+            for (Role role2: allRoles){
+                if (role1.getRoleName().equals(role2.getRoleName())){
+                    addRoles.add(role2);
+                    coincidence = true;
+                }
+            }
+            if (!coincidence){
+                addRoles.add(role1);
             }
         }
 
-        roles.removeAll(toRemove);
-        roles.addAll(toAdd);
-        account.setRoles(roles);
+        roles = addRoles;
+        dto.setRoles(roles);
 
-        accountRepository.save(account);
-    }
-
-    private Set<Role> collectRolesToSet(String roleStr){
-
-        String[] roleStrings = roleStr.split("\\s*,\\s*");
-        Set<Role> rolesSet = new HashSet<>();
-
-        for (String s: roleStrings) {
-            Role role = new Role();
-            role.setRoleName(s);
-            rolesSet.add(role);
-        }
-
-        return rolesSet;
+        accountRepository.save(mapper.toEntity(dto));
     }
 
     @Override
