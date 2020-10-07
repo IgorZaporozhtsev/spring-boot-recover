@@ -2,6 +2,7 @@ package com.zeecoder.reboot.controller.rest;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zeecoder.reboot.dto.AccountDto;
+import com.zeecoder.reboot.exception.ApiRequestException;
 import com.zeecoder.reboot.model.Account;
 import com.zeecoder.reboot.service.AccountServiceImpl;
 import net.bytebuddy.build.Plugin;
@@ -11,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -28,7 +30,11 @@ public class AccountRestController {
 
     @GetMapping(value = "/getAccounts")
     public List<Account> getAll(){
-        return service.getAll();
+        List<Account> all = service.getAll();
+        if (all.isEmpty()){
+            throw new ApiRequestException("There is no Users");
+        }
+        return all;
     }
 
     @GetMapping(value = "/{id}")
@@ -37,12 +43,9 @@ public class AccountRestController {
         return ResponseEntity.accepted().body(account);
     }
 
-    @PostMapping("/add")
-    public String addAccount(@Valid @ModelAttribute("account") Account account, BindingResult result, @RequestParam String role) throws JsonProcessingException {
-        if (result.hasErrors()) {
-            return "redirect:/account";
-        }
-        service.add(account, role);
+    @PostMapping("/add") //todo почитать про @ModelAttribute
+    public String addAccount(@RequestBody AccountDto dto){
+        service.add(dto);
         return "redirect:/account";
     }
 
