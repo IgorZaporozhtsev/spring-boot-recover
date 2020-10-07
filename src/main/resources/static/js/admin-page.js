@@ -1,11 +1,19 @@
 $( document ).ready(function() {
     console.log( "document loaded" );
-});
 
-
-$.get( "/api/accounts/getAccounts", function( data ) {
-        $( ".result" ).html( data );
-        setPageData(data);
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        url: '/api/accounts/getAccounts',
+        success: function(data){
+            console.log("success");
+            setPageData(data);
+        },
+        error: function (data) {
+            console.log("error");
+            console.log(data.responseJSON);
+        }
+    });
 });
 
 function setPageData(data){
@@ -56,6 +64,7 @@ function populateDataToModal(data) {
     $('#first_name_edit').val(data.firstName);
     $('#nickname_edit').val(data.nickname);
     $('#email_edit').val(data.email);
+    $('#password_edit').val(data.password);
 
     $.each(data.roles, function (index, value) {
        createRoleInput(value.roleName);
@@ -64,6 +73,7 @@ function populateDataToModal(data) {
 }
 
 function createRoleInput(roleName) {
+        console.log("createRoleInput");
 // add row
             //child exists
             var html = '';
