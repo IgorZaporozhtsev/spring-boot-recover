@@ -6,37 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+
 </head>
 <body>
-<div th:fragment="add-page" class="addForm">
-    <form class="needs-validation novalidate" action="#" th:action="@{/account/add}" th:object="${account}" method="post">
+<div class="addForm">
             <div class="form-group">
                 <label for="id">id</label>
-                <input id="id"  th:readonly="condition" class="form-control" type="id" name="id" th:field="*{id}"></div>
+                <input id="id"  class="form-control" type="id" name="id"></div>
             <div class="form-group">
                 <label for="firstName">first_name</label>
-                <input id="firstName" class="form-control" type="text" name="firstName"  th:field="*{firstName}" >
+                <input id="firstName" class="form-control" type="text" name="firstName">
             </div>
 
             <div class="form-group">
                 <label for="nickname">nickname</label>
-                <input id="nickname" class="form-control" type="text" name="nickname" th:field="*{nickname}">
+                <input id="nickname" class="form-control" type="text" name="nickname">
             </div>
             <div class="form-group">
                 <label for="email">email</label>
-                <input id="email" class="form-control" type="email" th:field="*{email}">
+                <input id="email" class="form-control" type="email">
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" class="form-control" id="password" th:field="*{password}" th:class="${account.password} ? 'form-control is-invalid' : 'form-control ' ">
-                <span th:if="${#fields.hasErrors('password')}" class="invalid-feedback" th:errors="*{password}">Name Error</span>
+                <input type="password" class="form-control" id="password">
             </div>
         <div class="form-group">
             <label for="role">role</label>
-            <input id="role" class="form-control" type="text" value="ADMIN, USER, BLOGGER, MODERATOR" th:name="role" >
+            <input id="role" class="form-control" type="text" value="ADMIN, USER, BLOGGER, MODERATOR">
         </div>
         <button type="submit" class="btn btn-primary">Create</button>
-    </form>
 </div>
 </body>
 

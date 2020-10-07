@@ -5,9 +5,6 @@
     <title>Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!--    <meta name="_csrf" th:content="${_csrf.token}"/>-->
-<!--    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
-
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
           integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
@@ -15,17 +12,13 @@
             integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
             crossorigin="anonymous"></script>
 
-
-<!--    <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js"
-            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-            crossorigin="anonymous"></script>-->
-
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
             integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
             crossorigin="anonymous"></script>
 
 
     <script src="static/js/admin-page.js" th:src="@{/js/admin-page.js}"></script>
+    <script src="static/js/add-account.js" th:src="@{/js/add-account.js}"></script>
 
     <style>
         .addForm{
@@ -88,7 +81,31 @@
                         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                             <p><h5 class="card-title">Add new Account</h5></p>
                             <!-- Add Account page -->
-                            <div th:replace="add-account :: add-page" class="addForm"></div>
+                            <div class="addForm">
+                                <div class="form-group">
+                                    <label for="add_id">id</label>
+                                    <input id="add_id"  class="form-control" type="id" name="id"></div>
+                                <div class="form-group">
+                                    <label for="add_firstName">first_name</label>
+                                    <input id="add_firstName" class="form-control" type="text" name="firstName">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="add_nickname">nickname</label>
+                                    <input id="add_nickname" class="form-control" type="text" name="nickname">
+                                </div>
+                                <div class="form-group">
+                                    <label for="add_email">email</label>
+                                    <input id="add_email" class="form-control" type="email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="add_password">Password:</label>
+                                    <input id="add_password" type="password" class="form-control" >
+                                </div>
+                                <div id="newAddRow"></div>
+                                <button id="createRow" type="button" class="btn btn-info">Add Row</button>
+                                <button id="addButton" type="submit" class="btn btn-primary">Create</button>
+                            </div>
                         </div>
                     </div>
                 </div>
