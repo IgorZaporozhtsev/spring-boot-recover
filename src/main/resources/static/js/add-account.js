@@ -37,6 +37,7 @@ $(document).on("click", "#addButton", function () {
     var email = $("#add_email").val();
 
     var roles = [];
+    // [ {roleName:ADMIN}, {authority: ADMIN} ]
 
     $('#inputAddFormRow input').each(function () {
         var role = $(this).val();

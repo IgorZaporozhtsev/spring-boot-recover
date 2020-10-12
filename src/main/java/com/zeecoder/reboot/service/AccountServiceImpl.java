@@ -58,6 +58,8 @@ public class AccountServiceImpl implements AccountService {
             }
         }
 
+        //Collections.disjoint() todo
+
         roles = addRoles;
         dto.setRoles(roles);
 
@@ -67,7 +69,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void update(AccountDto dto) { //todo переписать на lambda
 
-        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        isPasswordWasChanged(dto);
 
         Set<Role> roles = dto.getRoles();
         Set<Role> addRoles = new HashSet<>();
@@ -92,13 +94,20 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(mapper.toEntity(dto));
     }
 
+    private void isPasswordWasChanged(AccountDto dto) {
+        Account derived = accountRepository.getOne(dto.getId());
+        if (!derived.getPassword().equals(dto.getPassword())){
+            dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
+    }
+
     @Override
     public void delete(Long id) {
         accountRepository.deleteById(id);
     }
 
-    public Account getAccountById(Long id) {
-        return accountRepository.getOne(id);
+    public Optional<Account> getAccountById(Long id) {
+        return accountRepository.findById(id);
     }
 
     @Override

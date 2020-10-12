@@ -1,20 +1,14 @@
 package com.zeecoder.reboot.controller.rest;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.zeecoder.reboot.dto.AccountDto;
 import com.zeecoder.reboot.exception.ApiRequestException;
 import com.zeecoder.reboot.model.Account;
 import com.zeecoder.reboot.service.AccountServiceImpl;
-import net.bytebuddy.build.Plugin;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -30,16 +24,15 @@ public class AccountRestController {
 
     @GetMapping(value = "/getAccounts")
     public List<Account> getAll(){
-        List<Account> all = service.getAll();
-        if (all.isEmpty()){
-            throw new ApiRequestException("There is no Users");
-        }
-        return all;
+        return service.getAll();
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Account> getOne(@PathVariable(value = "id")  Long id){
-        Account account = service.getAccountById(id);
+        Account account = service.getAccountById(id).orElse(null);
+        if (account == null){
+            throw new ApiRequestException("User is not present");
+        }
         return ResponseEntity.accepted().body(account);
     }
 
