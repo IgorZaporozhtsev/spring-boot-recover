@@ -3,6 +3,7 @@ package com.zeecoder.reboot.service;
 import com.zeecoder.reboot.dto.AccountDto;
 import com.zeecoder.reboot.model.Account;
 import java.util.List;
+import java.util.Optional;
 
 public interface AccountService {
 
@@ -14,7 +15,7 @@ public interface AccountService {
 
     void delete(Long id);
 
-    Account getAccountById(Long id);
+    Optional<Account> getAccountById(Long id);
 
     Account findByFirstName(String firstName);
 }

@@ -20,7 +20,7 @@ function setPageData(data){
 
         for(key in data) {
 
-                var account = data[key];
+                var account = data[key];  // todo rename data
                 var id = account.id;
 
                 $( ".acc-items").append(
@@ -44,7 +44,7 @@ $(document).on("click", ".del", function () {
     $.ajax({
             type: 'DELETE',
             url: '/api/accounts/delete/'+id,
-            data: 'id=' + id,
+            data: 'id=' + id,                                           //  todo delete data
             success: function (data) {
                     //reload page
                     location.reload();

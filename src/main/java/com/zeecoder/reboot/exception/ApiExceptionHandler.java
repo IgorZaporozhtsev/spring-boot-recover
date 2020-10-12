@@ -5,20 +5,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import static com.zeecoder.reboot.exception.ApiException.Code.USER_NOT_FOUND_EXCEPTION;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
 
     @ExceptionHandler(value = {ApiRequestException.class})
-    public ResponseEntity<Object> handleApiRequestException(ApiRequestException exception){
+    public ResponseEntity<Object> handleApiRequestException(){
 
-        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+        ApiException apiException = new ApiException(
+            USER_NOT_FOUND_EXCEPTION.getMessage(),
+            USER_NOT_FOUND_EXCEPTION.getHttpStatus(),
+            USER_NOT_FOUND_EXCEPTION.getTimestamp());
 
-        ApiException apiException = new ApiException(exception.getMessage(), exception,
-            badRequest, ZonedDateTime.now(ZoneId.of("Z")));
-
-        return new ResponseEntity<Object>(apiException, badRequest);
+        return new ResponseEntity<Object>(apiException, HttpStatus.BAD_REQUEST);
     }
 }
