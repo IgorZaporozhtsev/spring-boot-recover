@@ -1,4 +1,4 @@
-package com.zeecoder.reboot.jwt;
+package com.zeecoder.reboot.security.jwt;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
