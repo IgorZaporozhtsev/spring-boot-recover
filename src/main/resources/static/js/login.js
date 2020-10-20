@@ -1,7 +1,8 @@
 $(document).ready(function() {
     console.log( "login.js document loaded" );
 
-    var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXRlciIsImF1dGhvcml0aWVzIjpbeyJpZCI6MTQ2LCJyb2xlTmFtZSI6IkFETUlOIiwiYXV0aG9yaXR5IjoiQURNSU4ifSx7ImlkIjoxNDcsInJvbGVOYW1lIjoiVVNFUiIsImF1dGhvcml0eSI6IlVTRVIifV0sImlhdCI6MTYwMzAzMzI4OCwiZXhwIjoxNjA0MTgxNjAwfQ.YO0bnSKEW95ppQzXbT0dfxZsSGp0UUoHeOQpb1m8glqKgSpRjw8LyYNIJ48DgCDYSbSM4KlLO0MsXN_sd89eyg";
+    //var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXRlciIsImF1dGhvcml0aWVzIjpbeyJpZCI6MTQ2LCJyb2xlTmFtZSI6IkFETUlOIiwiYXV0aG9yaXR5IjoiQURNSU4ifSx7ImlkIjoxNDcsInJvbGVOYW1lIjoiVVNFUiIsImF1dGhvcml0eSI6IlVTRVIifV0sImlhdCI6MTYwMzAzMzI4OCwiZXhwIjoxNjA0MTgxNjAwfQ.YO0bnSKEW95ppQzXbT0dfxZsSGp0UUoHeOQpb1m8glqKgSpRjw8LyYNIJ48DgCDYSbSM4KlLO0MsXN_sd89eyg";
+    var token = localStorage.gettItem('token');
     localStorage.setItem('token', token);
 
 
