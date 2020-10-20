@@ -1,14 +1,10 @@
 package com.zeecoder.reboot.security.jwt;
 
-import com.zeecoder.reboot.exception.ApiRequestException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.crypto.SecretKey;
+import javax.security.auth.message.AuthException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -37,9 +34,9 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
     private final JwtConfig jwtConfig;
     private final SecretKey secretKey;
 
-     public JwtTokenVerifier(JwtConfig jwtConfig, SecretKey secretKey) {
-        this.jwtConfig = jwtConfig;
+     public JwtTokenVerifier(SecretKey secretKey, JwtConfig jwtConfig) {
         this.secretKey = secretKey;
+        this.jwtConfig = jwtConfig;
     }
 
     @Override
@@ -67,7 +64,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
                 var authorities = (List<Map<String, String>>) body.get("authorities");
 
-                Set<SimpleGrantedAuthority> simpleGrantedAuthority = authorities.stream()
+                Set<SimpleGrantedAuthority> simpleGrantedAuthorities = authorities.stream()
                     .map(m -> new SimpleGrantedAuthority(m.get("authority")))
                     .collect(Collectors.toSet());
 
@@ -75,7 +72,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                 Authentication authentication = new UsernamePasswordAuthenticationToken(
                     username,
                     null,
-                    simpleGrantedAuthority);
+                    simpleGrantedAuthorities);
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 

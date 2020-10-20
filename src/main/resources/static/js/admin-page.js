@@ -1,10 +1,16 @@
+var token = localStorage.getItem("token");
+console.log("token " + token);
+
 $( document ).ready(function() {
-    console.log( "document loaded" );
+    console.log( "admin-page.js document loaded" );
 
     $.ajax({
         type: "GET",
         contentType: "application/json",
         url: '/api/accounts/getAccounts',
+        headers: {
+            Authorization: 'Bearer ' + token
+        },
         success: function(data){
             console.log("success");
             setPageData(data);
@@ -18,7 +24,7 @@ $( document ).ready(function() {
 
 function setPageData(data){
 
-        for(key in data) {
+        for(var key in data) {
 
                 var account = data[key];  // todo rename data
                 var id = account.id;
