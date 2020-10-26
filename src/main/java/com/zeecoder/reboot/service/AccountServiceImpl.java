@@ -46,14 +46,14 @@ public class AccountServiceImpl implements AccountService {
         List<Role> allRoles = roleService.getAll();
 
         for (Role role1 : roles) {
-            boolean coincidence = false;
+            boolean matcher = false;
             for (Role role2: allRoles){
-                if (role1.getRoleName().equals(role2.getRoleName())){
+                if (role1.equals(role2)){
                     addRoles.add(role2);
-                    coincidence = true;
+                    matcher = true;
                 }
             }
-            if (!coincidence){
+            if (!matcher){
                 addRoles.add(role1);
             }
         }
