@@ -45,15 +45,17 @@ public class AccountServiceImpl implements AccountService {
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         Set<Role> roles = dto.getRoles();
+
         Role userRole = new Role("USER");
         roles.add(userRole);
+
         Set<Role> addRoles = new HashSet<>();
         List<Role> allRoles = roleService.getAll();
 
         for (Role role1 : roles) {
             boolean coincidence = false;
             for (Role role2: allRoles){
-                if (role1.getRoleName().equals(role2.getRoleName())){
+                if (role1.equals(role2)){
                     addRoles.add(role2);
                     coincidence = true;
                 }
@@ -63,7 +65,7 @@ public class AccountServiceImpl implements AccountService {
             }
         }
 
-        //Collections.disjoint() todo
+        //Collections.disjoint()
 
         roles = addRoles;
         dto.setRoles(roles);
