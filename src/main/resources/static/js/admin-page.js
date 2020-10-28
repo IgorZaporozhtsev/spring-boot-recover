@@ -1,8 +1,47 @@
-var token = localStorage.getItem("token");
+$(document).ready(function() {
+    console.log( "admin-page.js document loaded" );
+});
 
-console.log("token " + token);
+$(document).on("click", "#signInButton", function () {
+    console.log( "login.js signInButton" );
 
-$( document ).ready(function() {
+    var fst_name = $("#exampleInputUsername").val();
+    var password = $("#exampleInputPassword").val();
+
+    var credentials = {
+        "username": fst_name,
+        "password": password
+    }
+
+    $.ajax({
+        cache: true,
+        type: "POST",
+        contentType: "application/json",
+        url: '/login',
+        data: JSON.stringify(credentials),
+        success: function(data, textStatus, status){
+            console.log("success");
+            window.location.replace("http://localhost:8080/account");
+
+            var token = status.getResponseHeader('Authorization');
+            localStorage.setItem("token",token);
+        },
+        error: function (e) {
+            console.log("error");
+        },
+        done : function(e) {
+            console.log("done");
+        }
+    });
+});
+
+
+// var token = localStorage.getItem("token");
+//
+// console.log("token " + token);
+var storedToken = localStorage.getItem("token");
+
+$(document).ready(function() {
     console.log( "admin-page.js document loaded" );
 
     $.ajax({
@@ -10,7 +49,7 @@ $( document ).ready(function() {
         contentType: "application/json",
         url: '/api/accounts/getAccounts',
         headers: {
-            Authorization: 'Bearer ' + token
+            Authorization: 'Bearer ' + storedToken
         },
         success: function(data){
             console.log("success");
@@ -22,6 +61,7 @@ $( document ).ready(function() {
         }
     });
 });
+
 
 function setPageData(data){
 
@@ -51,7 +91,10 @@ $(document).on("click", ".del", function () {
     $.ajax({
             type: 'DELETE',
             url: '/api/accounts/delete/'+id,
-            data: 'id=' + id,                                           //  todo delete data
+            headers: {
+                Authorization: 'Bearer ' + storedToken
+            },
+            data: 'id=' + id,
             success: function (data) {
                     //reload page
                     location.reload();
@@ -60,10 +103,20 @@ $(document).on("click", ".del", function () {
 });
 
 $(document).on("click", ".edit", function () {
-        var id = $(this).attr('id');
-        $.get( "/api/accounts/"+id, function( data ) {
-            populateDataToModal(data);
-        });
+    var id = $(this).attr('id');
+
+    $.ajax({
+        type: 'GET',
+        url: '/api/accounts/'+id,
+        headers: {
+            Authorization: 'Bearer ' + storedToken
+        },
+        data: 'id=' + id,
+        success: function (data) {
+            populateDataToModal(data)
+        }
+    });
+
 });
 
 function populateDataToModal(data) {
@@ -139,6 +192,9 @@ $(document).on("click", "#editButton", function () {
             type: "PUT",
             contentType: "application/json",
             url: '/api/accounts/update',
+            headers: {
+                Authorization: 'Bearer ' + storedToken
+            },
             data: JSON.stringify(account),
             success: function(data){
                 console.log("success");
@@ -146,10 +202,6 @@ $(document).on("click", "#editButton", function () {
             },
             error: function (e) {
                 console.log("error");
-                closeModal();
-            },
-            done : function(e) {
-                console.log("done");
                 closeModal();
             }
         });

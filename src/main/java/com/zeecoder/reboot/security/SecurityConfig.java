@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -19,24 +20,22 @@ import javax.crypto.SecretKey;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @ComponentScan("com.zeecoder.reboot.security")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtConfig jwtConfig;
     private final SecretKey secretKey;
-    private final AuthSuccessHandlerImpl successHandler;
 
     @Autowired
     public SecurityConfig(UserDetailsServiceImpl userDetailsService,
-                          AuthSuccessHandlerImpl successHandler,
-                          AuthFailureHandlerImpl failureHandler,
                           JwtConfig jwtConfig,
-                          SecretKey secretKey, AuthSuccessHandlerImpl successHandler1) {
+                          SecretKey secretKey
+    ) {
         this.userDetailsService = userDetailsService;
         this.jwtConfig = jwtConfig;
         this.secretKey = secretKey;
-        this.successHandler = successHandler1;
     }
 
     @Override
@@ -48,18 +47,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtUsernameAndPasswordAuthFilter(authenticationManager(), jwtConfig, secretKey))
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtUsernameAndPasswordAuthFilter.class)
             .authorizeRequests()
-                .antMatchers("/", "/login").permitAll()
-                .antMatchers("/account/**").permitAll()//.hasAnyAuthority("ADMIN")
-                .antMatchers("/api/**").hasAnyAuthority("ADMIN")
-                .antMatchers("/user_page/**").hasAnyAuthority("USER", "ADMIN")
-            .anyRequest().authenticated();
+                .antMatchers("/", "/login").permitAll();
+
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
+            .userDetailsService(userDetailsService)
+            .passwordEncoder(passwordEncoder());
     }
 
     @Bean

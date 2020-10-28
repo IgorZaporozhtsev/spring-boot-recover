@@ -12,7 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.*;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Builder
@@ -40,6 +45,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    //todo Transactional
+    @Transactional
     public void add(AccountDto dto) {
 
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));

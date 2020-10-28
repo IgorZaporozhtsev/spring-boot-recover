@@ -57,6 +57,9 @@ $(document).on("click", "#addButton", function () {
         type: "POST",
         contentType: "application/json",
         url: '/api/accounts/add',
+        headers: {
+            Authorization: 'Bearer ' + storedToken
+        },
         data: JSON.stringify(account),
         success: function(data){
             console.log("success");
