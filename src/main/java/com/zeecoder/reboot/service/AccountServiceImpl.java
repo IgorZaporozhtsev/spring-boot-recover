@@ -6,14 +6,24 @@ import com.zeecoder.reboot.dto.AccountDto;
 import com.zeecoder.reboot.model.Account;
 import com.zeecoder.reboot.model.Role;
 import com.zeecoder.reboot.repository.AccountRepository;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import java.util.*;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
+@Builder
+@AllArgsConstructor
 public class AccountServiceImpl implements AccountService {
+
 
     private final AccountRepository accountRepository;
     private final RoleService roleService;
@@ -35,13 +45,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    //todo Transactional
+    @Transactional
     public void add(AccountDto dto) {
 
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 
         Set<Role> roles = dto.getRoles();
+
         Role userRole = new Role("USER");
         roles.add(userRole);
+
         Set<Role> addRoles = new HashSet<>();
         List<Role> allRoles = roleService.getAll();
 
@@ -58,7 +72,7 @@ public class AccountServiceImpl implements AccountService {
             }
         }
 
-        //Collections.disjoint() todo
+        //Collections.disjoint()
 
         roles = addRoles;
         dto.setRoles(roles);

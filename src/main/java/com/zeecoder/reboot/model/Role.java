@@ -14,6 +14,7 @@ import java.util.Set;
 @Getter
 @ToString
 @Entity
+@ToString
 @Table(name = "role")
 public class Role implements GrantedAuthority {
 
