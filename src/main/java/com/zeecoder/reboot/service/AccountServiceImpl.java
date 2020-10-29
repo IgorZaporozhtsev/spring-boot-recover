@@ -6,6 +6,8 @@ import com.zeecoder.reboot.dto.AccountDto;
 import com.zeecoder.reboot.model.Account;
 import com.zeecoder.reboot.model.Role;
 import com.zeecoder.reboot.repository.AccountRepository;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@Builder
+@AllArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
