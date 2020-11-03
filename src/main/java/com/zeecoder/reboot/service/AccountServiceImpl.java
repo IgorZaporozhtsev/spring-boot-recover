@@ -1,4 +1,3 @@
-
 package com.zeecoder.reboot.service;
 
 import com.zeecoder.reboot.config.AccountMapper;
@@ -13,7 +12,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -24,12 +22,10 @@ import java.util.Set;
 @AllArgsConstructor
 public class AccountServiceImpl implements AccountService {
 
-
     private final AccountRepository accountRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
     private final AccountMapper mapper;
-
 
     @Autowired
     public AccountServiceImpl(@Lazy PasswordEncoder passwordEncoder, AccountRepository repository, RoleService roleService, AccountMapper accountMapper) {
@@ -44,22 +40,31 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findAll();
     }
 
-    @Override
-    //todo Transactional
     @Transactional
+    @Override
     public void add(AccountDto dto) {
-
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-
         Set<Role> roles = dto.getRoles();
-
         Role userRole = new Role("USER");
         roles.add(userRole);
+        AccountDto comparedDto = getComparedEntityWithDbData(dto, roles);
+        accountRepository.save(mapper.toEntity(comparedDto));
+    }
 
+    @Transactional
+    @Override
+    public void update(AccountDto dto) { //todo переписать на lambda
+        isPasswordWasChanged(dto);
+        Set<Role> roles = dto.getRoles();
+        AccountDto comparedDto = getComparedEntityWithDbData(dto, roles);
+        accountRepository.save(mapper.toEntity(comparedDto));
+    }
+
+    private AccountDto getComparedEntityWithDbData(AccountDto dto, Set<Role> roles) {
         Set<Role> addRoles = new HashSet<>();
         List<Role> allRoles = roleService.getAll();
 
-        for (Role role1 : roles) {
+        for (Role role1 : roles) {           //Collections.disjoint() ?
             boolean coincidence = false;
             for (Role role2: allRoles){
                 if (role1.equals(role2)){
@@ -71,41 +76,10 @@ public class AccountServiceImpl implements AccountService {
                 addRoles.add(role1);
             }
         }
-
-        //Collections.disjoint()
-
         roles = addRoles;
         dto.setRoles(roles);
 
-        accountRepository.save(mapper.toEntity(dto));
-    }
-
-    @Override
-    public void update(AccountDto dto) { //todo переписать на lambda
-
-        isPasswordWasChanged(dto);
-
-        Set<Role> roles = dto.getRoles();
-        Set<Role> addRoles = new HashSet<>();
-        List<Role> allRoles = roleService.getAll();
-
-        for (Role role1 : roles) {
-            boolean coincidence = false;
-            for (Role role2: allRoles){
-                if (role1.getRoleName().equals(role2.getRoleName())){
-                    addRoles.add(role2);
-                    coincidence = true;
-                }
-            }
-            if (!coincidence){
-                addRoles.add(role1);
-            }
-        }
-
-        roles = addRoles;
-        dto.setRoles(roles);
-
-        accountRepository.save(mapper.toEntity(dto));
+        return dto;
     }
 
     private void isPasswordWasChanged(AccountDto dto) {
@@ -129,4 +103,3 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findByFirstName(firstName);
     }
 }
-

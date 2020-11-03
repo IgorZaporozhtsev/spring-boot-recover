@@ -1,0 +1,17 @@
+
+/**
+ Spring security is based on something called the SecurityContext.
+ This something is a ThreadLocal, e.g only exists on one thread at a time.
+ Each request will be on it's own thread and will have no access to any protected resource unless that SecurityContext
+ is set to contain the appropriate roles. So even though you just logged in, which behind the scenes inserted roles into
+ the SecurityContext, that security context is gone just as though it had been a different user.
+
+ We can control exactly when our session gets created and how Spring Security will interact with it
+ SessionCreationPolicy.STATELESS)
+
+ “stateless” – is a guarantee that the application will not create any session at all.
+ These more strict control mechanisms have the direct implication that cookies are not used and so each
+ and every request needs to be re-authenticated.
+
+
+* */

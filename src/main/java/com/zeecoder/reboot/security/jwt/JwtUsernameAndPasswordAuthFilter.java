@@ -40,7 +40,7 @@ public class JwtUsernameAndPasswordAuthFilter extends UsernamePasswordAuthentica
 
         try {
             UsernameAndPasswordAuthenticationRequest authenticationRequest = new ObjectMapper()
-                .readValue(request.getInputStream(), UsernameAndPasswordAuthenticationRequest.class);
+                .readValue(request.getInputStream(), UsernameAndPasswordAuthenticationRequest.class);  // read name/password value form request json
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                 authenticationRequest.getUsername(),
@@ -61,11 +61,11 @@ public class JwtUsernameAndPasswordAuthFilter extends UsernamePasswordAuthentica
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
-                                            Authentication authResult) throws IOException, ServletException {
+                                            Authentication authResult) {
 
         String token = Jwts.builder()
             .setSubject(authResult.getName())
-            .claim("authorities", authResult.getAuthorities())
+            .claim("authorities", authResult.getAuthorities())  //claim -требования
             .setIssuedAt(new Date())
             .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusWeeks(2)))
             .signWith(secretKey)

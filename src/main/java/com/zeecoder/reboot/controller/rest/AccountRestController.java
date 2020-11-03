@@ -40,7 +40,7 @@ public class AccountRestController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/add") //todo почитать про @ModelAttribute
+    @PostMapping("/add")
     public String addAccount(@RequestBody AccountDto dto){
         service.add(dto);
         return "redirect:/account";
