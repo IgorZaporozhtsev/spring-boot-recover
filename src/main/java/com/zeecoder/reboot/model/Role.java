@@ -12,6 +12,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Setter
 @Getter
+@ToString
 @Entity
 @ToString
 @Table(name = "role")
