@@ -1,0 +1,95 @@
+
+/**
+ Spring security is based on something called the SecurityContext.
+ This something is a ThreadLocal, e.g only exists on one thread at a time.
+ Each request will be on it's own thread and will have no access to any protected resource unless that SecurityContext
+ is set to contain the appropriate roles. So even though you just logged in, which behind the scenes inserted roles into
+ the SecurityContext, that security context is gone just as though it had been a different user.
+
+ We can control exactly when our session gets created and how Spring Security will interact with it
+ SessionCreationPolicy.STATELESS)
+
+ “stateless” – is a guarantee that the application will not create any session at all.
+ These more strict control mechanisms have the direct implication that cookies are not used and so each
+ and every request needs to be re-authenticated.
+
+
+* */
+
+
+1. SessionCreationPolicyStateless.STATELESS чдля чего нужно
+    https://golb.hplar.ch/2019/05/stateless.html
+
+
+    Stateless, in this context, means that we don't store any information about the logged-in user in memory.
+         We still need to store information about the logged-in user somewhere and associate it with a client.
+         In this example, we are going to store session information in a database table and store the primary key to this
+         information in a cookie.
+
+    ALWAYS
+        Always create an HttpSession
+    IF_REQUIRED
+        Spring Security will only create an HttpSession if required
+    NEVER
+        Spring Security will never create an HttpSession, but will use the HttpSession if it already exists
+    STATELESS
+        Spring Security will never create an HttpSession and it will never use it to obtain the SecurityContext
+
+
+2. аналоги PreAuthorize
+https://www.codeflow.site/ru/article/spring-security-method-security
+
+@RolesAllowed
+    is the JSR-250 Java security standard
+    it only supports role-based security.
+    @EnableGlobalMethodSecurity annotation need to be set to true
+    @EnableGlobalMethodSecurity(jsr250Enabled = true)
+
+@PreAuthorize /  @PostAuthorize
+    Spring Expression Language (SpEL)
+    is part of the Spring Security framework
+    @EnableGlobalMethodSecurity annotation needs to be set to true
+    @EnableGlobalMethodSecurity(prePostEnabled = true)
+
+    @PreAuthorize проверяет данное выражение перед входом в метод
+    @PostAuthorize проверяет его после выполнения метода и может изменить результат. Проверяет какой результат возвращаеться
+
+
+@Secured
+    is a legacy Spring Security 2 annotation
+    does not support using Spring Expression Language (SpEL)
+    @EnableGlobalMethodSecurity(securedEnabled = true)
+
+@PreFilter / @PostFilter
+    @PreFilter - для фильтрации аргумента коллекции перед выполнением метода
+        defines a rule for filtering the return list of a method, by applying that rule to every element in the list.
+         If the evaluated value is true, the item will be kept in the list. Otherwise, the item will be removed.
+    @PostFilter - можем отфильтровать возвращенную коллекцию метода getAllUsernames();
+        works in a very similar fashion, however, the filtering is applied to a list that is being passed as an input
+        parameter to the annotated method.
+
+
+3. аналоги hasAuthorities
+    hasAnyAuthority()
+    hasAuthority
+    hasAnyRole()
+    hasRole
+    permitAll
+
+
+4. рассказать что происходит в фильтрах построчно
+
+    UsernamePasswordAuthenticationFilter
+        Processes an authentication form submission.
+
+        attemptAuthentication метод добаляет аутентифицированого пользователя в Authentication
+              (interface Authentication extends Principle)
+               authenticationManager проверяет пользователей, аутентифицирует returning a fully populated Authentication
+               authenticationManager -> ProviderManager -> AuthenticationProvider -> UserDetails
+
+               https://stackoverflow.com/questions/9787409/what-is-the-default-authenticationmanager-in-spring-security-how-does-it-authen
+
+               object (including granted authorities) if successful.
+
+         successfulAuthentication -
+            Sets the successful Authentication object on the SecurityContextHolder

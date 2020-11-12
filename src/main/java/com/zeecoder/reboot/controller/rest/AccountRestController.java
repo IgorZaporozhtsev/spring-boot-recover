@@ -23,14 +23,14 @@ public class AccountRestController {
         this.service = service;
     }
 
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping(value = "/getAccounts")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MODERATOR')")
     public List<Account> getAll(){
         return service.getAll();
     }
 
     @GetMapping(value = "/{id}")
-    @PreAuthorize("hasAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public ResponseEntity<Account> getOne(@PathVariable(value = "id")  Long id){
         Account account = service.getAccountById(id).orElse(null);
         if (account == null){
@@ -40,10 +40,9 @@ public class AccountRestController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/add") //todo почитать про @ModelAttribute
-    public String addAccount(@RequestBody AccountDto dto){
+    @PostMapping("/add")
+    public void addAccount(@RequestBody AccountDto dto){
         service.add(dto);
-        return "redirect:/account";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -55,7 +54,8 @@ public class AccountRestController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping(value = "/delete/{id}")
-    public void delete(@PathVariable(value = "id")  Long id) {
+    public ResponseEntity<Void> delete(@PathVariable(value = "id")  Long id) {
         service.delete(id);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }
