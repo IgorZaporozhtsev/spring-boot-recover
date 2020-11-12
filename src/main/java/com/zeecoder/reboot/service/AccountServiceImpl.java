@@ -28,7 +28,8 @@ public class AccountServiceImpl implements AccountService {
     private final AccountMapper mapper;
 
     @Autowired
-    public AccountServiceImpl(@Lazy PasswordEncoder passwordEncoder, AccountRepository repository, RoleService roleService, AccountMapper accountMapper) {
+    public AccountServiceImpl(@Lazy PasswordEncoder passwordEncoder, AccountRepository repository,
+                              RoleService roleService, AccountMapper accountMapper) {
         this.passwordEncoder = passwordEncoder;
         this.accountRepository = repository;
         this.roleService = roleService;

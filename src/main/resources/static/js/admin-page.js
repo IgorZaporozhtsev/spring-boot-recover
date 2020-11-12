@@ -85,6 +85,10 @@ function setPageData(data){
         }
 }
 
+
+
+
+// DELETE
 $(document).on("click", ".del", function () {
     var id = $(this).attr('id');
 
@@ -95,12 +99,18 @@ $(document).on("click", ".del", function () {
                 Authorization: 'Bearer ' + storedToken
             },
             data: 'id=' + id,
-            success: function (data) {
-                    //reload page
-                    location.reload();
-            }
+            success: () => { // arrow allows refer to this
+                removeRowAfterDeleteRequest(this)
+            },
     });
 });
+
+
+//remove row from all users when DELETE request successful
+function removeRowAfterDeleteRequest(thisButton) {
+    console.log("row removes from all users");
+    $(thisButton).closest('tr').remove();
+}
 
 $(document).on("click", ".edit", function () {
     var id = $(this).attr('id');
@@ -148,6 +158,12 @@ function createRoleInput(roleName) {
         $('#newRow').append(html);
 }
 
+// remove row from update Modal window
+$(document).on('click', '#removeRow', function () {
+    $(this).closest('#inputFormRow').remove();
+    console.log("remove unknown row")
+});
+
 // remove role row after close close window (avoid repeat role in each Edit modal window)
 $(document).ready(function(){
     $('#editModal').on('hidden.bs.modal', function (e) {
@@ -158,12 +174,10 @@ $(document).ready(function(){
 $(document).on("click", "#addRow", function () {
         createRoleInput();
 });
-// remove row
-$(document).on('click', '#removeRow', function () {
-    $(this).closest('#inputFormRow').remove();
-});
 
 
+
+//UPDATE
 $(document).on("click", "#editButton", function () {
 
         var id = $('#id_edit').val();

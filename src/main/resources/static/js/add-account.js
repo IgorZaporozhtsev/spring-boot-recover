@@ -1,6 +1,5 @@
 $( document ).ready(function() {
     console.log( "add-account.js - document loaded" );
-    createAddRoleInput();
 });
 
 function createAddRoleInput() {
@@ -29,6 +28,9 @@ $(document).on('click', '#removeAddRow', function () {
 });
 
 $(document).on("click", "#addButton", function () {
+
+    window.location.replace("http://localhost:8080/account");
+    getAdminPageData();
 
     var id = $('#add_id').val();
     var fst_name = $("#add_firstName").val();
@@ -72,3 +74,24 @@ $(document).on("click", "#addButton", function () {
         }
     });
 });
+
+
+function getAdminPageData(){
+
+    $.ajax({
+        type: "GET",
+        contentType: "application/json",
+        url: '/api/accounts/getAccounts',
+        headers: {
+            Authorization: 'Bearer ' + storedToken
+        },
+        success: function(data){
+            console.log("success");
+            setPageData(data);
+        },
+        error: function (data) {
+            console.log("error");
+            console.log(data.responseJSON);
+        }
+    });
+}
